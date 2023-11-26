@@ -6,6 +6,8 @@ import com.mashape.unirest.http.Unirest;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class ItemService {
     public static String getItemId(String apiUrl, String auth, String hostId, String key) throws Exception {
@@ -16,7 +18,7 @@ public class ItemService {
                         hostId, key, auth))
                 .asJson();
 
-        org.json.JSONArray resultArray = response.getBody().getObject().getJSONArray("result");
+        JSONArray resultArray = response.getBody().getObject().getJSONArray("result");
 
         if (resultArray != null && resultArray.length() > 0) {
             org.json.JSONObject item = resultArray.getJSONObject(0);
@@ -34,7 +36,7 @@ public class ItemService {
                         itemId, auth))
                 .asJson();
 
-        org.json.JSONArray resultArray = response.getBody().getObject().getJSONArray("result");
+        JSONArray resultArray = response.getBody().getObject().getJSONArray("result");
 
         if (resultArray != null && resultArray.length() > 0) {
             org.json.JSONObject historyEntry = resultArray.getJSONObject(0);
@@ -44,7 +46,8 @@ public class ItemService {
         }
     }
 
-    public static String getItemValueInHourlyIntervals(String apiUrl, String auth, String itemId, ZoneId seoulZoneId, long startTime, long endTime) throws Exception {
+    public static String getItemValueInHourlyIntervals(String apiUrl, String auth, String itemId, ZoneId seoulZoneId,
+                                                       long startTime, long endTime) throws Exception {
         StringBuilder hourlyData = new StringBuilder();
 
         for (int i = 0; i < 24; i++) {
@@ -55,23 +58,32 @@ public class ItemService {
             HttpResponse<JsonNode> response = Unirest.post(apiUrl)
                     .header("Content-Type", "application/json")
                     .body(String.format(
-                            "{\"jsonrpc\":\"2.0\",\"method\":\"history.get\",\"params\":{\"output\":\"extend\",\"history\":\"0\",\"itemids\":\"%s\",\"sortfield\":\"clock\",\"sortorder\":\"DESC\",\"time_from\":\"%s\",\"time_till\":\"%s\",\"limit\":1},\"auth\":\"%s\",\"id\":1}",
+                            "{\"jsonrpc\":\"2.0\",\"method\":\"history.get\",\"params\":{\"output\":\"extend\",\"history\":\"0\",\"itemids\":\"%s\",\"sortfield\":\"clock\",\"sortorder\":\"ASC\",\"time_from\":\"%s\",\"time_till\":\"%s\"},\"auth\":\"%s\",\"id\":1}",
                             itemId, intervalStartTime, intervalEndTime, auth))
                     .asJson();
 
-            org.json.JSONArray resultArray = response.getBody().getObject().getJSONArray("result");
+            JSONArray resultArray = response.getBody().getObject().getJSONArray("result");
 
             if (resultArray != null && resultArray.length() > 0) {
-                org.json.JSONObject historyEntry = resultArray.getJSONObject(0);
-                String value = historyEntry.getString("value");
-//                double parsedValue = Double.parseDouble(value);
-//                hourlyData.append(hour).append(String.format(": %.4f", parsedValue)).append("\n");
-                hourlyData.append(hour + ": "+ value).append("\n");
+                double average = getAverage(resultArray);
+                hourlyData.append(hour).append(String.format(": %.6f", average)).append("\n");
             } else {
-                hourlyData.append(hour).append(" : N/A").append("\n ");
+                hourlyData.append(hour).append(" : N/A").append("\n");
             }
         }
 
-        return hourlyData.toString().trim(); // 공백 제거
+        return hourlyData.toString().trim();
+    }
+
+    private static double getAverage(JSONArray resultArray) {
+        double sum = 0.0;
+        for (int j = 0; j < resultArray.length(); j++) {
+            JSONObject historyEntry = resultArray.getJSONObject(j);
+            String value = historyEntry.getString("value");
+            double v = Double.parseDouble(value);
+            sum += v;
+        }
+
+        return sum / resultArray.length();
     }
 }

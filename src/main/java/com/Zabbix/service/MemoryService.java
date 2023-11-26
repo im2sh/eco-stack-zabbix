@@ -32,20 +32,7 @@ public class MemoryService {
             String hostInfo = host.getHostInfo();
 
 
-//            Instant now = Instant.now();
-//            long endTime = now.getEpochSecond();
-//            long startTime = now.minus(24, ChronoUnit.HOURS).toEpochMilli() / 1000;
-//            String memoryUsage = get24MemoryUsage(authToken, hostInfo, startTime, endTime);
-
-            ZoneId seoulZoneId = ZoneId.of("Asia/Seoul");
-            ZonedDateTime now = ZonedDateTime.now(seoulZoneId);
-            ZonedDateTime oneHourAgo = now.minusHours(24);
-
-            long endTime = now.toEpochSecond();
-            long startTime = oneHourAgo.toEpochSecond();
-            //String memoryUsageInfo = getMemoryUsage(authToken, hostInfo);
-            //System.out.println("Memory Usage Information:\n" + memoryUsageInfo);
-            String memoryUsage = get24MemoryUsage(authToken, hostInfo, seoulZoneId, startTime, endTime);
+            String memoryUsage = get24MemoryUsage(authToken, hostInfo);
 
             System.out.println("Memory Usage Information:\n" + memoryUsage);
         } catch (Exception e) {
@@ -53,7 +40,15 @@ public class MemoryService {
         }
     }
 
-    private String get24MemoryUsage(String authToken, String hostInfo, ZoneId seoulZoneId, long startTime, long endTime) throws Exception {
+    private String get24MemoryUsage(String authToken, String hostInfo) throws Exception {
+        // 시간 설정
+        ZoneId seoulZoneId = ZoneId.of("Asia/Seoul");
+        ZonedDateTime now = ZonedDateTime.now(seoulZoneId);
+        ZonedDateTime oneHourAgo = now.minusHours(24);
+
+        long endTime = now.toEpochSecond();
+        long startTime = oneHourAgo.toEpochSecond();
+
         // 호스트 정보에서 hostid와 호스트 이름 추출
         JSONArray hostArray = extractHostArray(hostInfo);
 
@@ -61,7 +56,7 @@ public class MemoryService {
         // 결과를 저장할 StringBuilder
         StringBuilder resultBuilder = new StringBuilder();
 
-        // 각 호스트의 CPU 정보 가져오기
+        // 각 호스트의 Memory 정보 가져오기
         for (Object hostObj : hostArray) {
             JSONObject host = (JSONObject) hostObj;
             String hostId = host.get("hostid").toString();
