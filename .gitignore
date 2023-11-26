@@ -37,4 +37,4 @@ out/
 .vscode/
 
 ### Zabbix ###
-/Users/2sh/Desktop/zabbix/src/main/java/com/Zabbix/domain/Zabbix.java
+com/Zabbix/domain/Zabbix.java
