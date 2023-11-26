@@ -17,7 +17,7 @@ public class ZabbixController {
 
     public void run(){
         cpuService.getHostCpuUsage();
-        //emoryService.getHostMemoryUsage();
-        //diskService.getHostDiskUsage();
+        memoryService.getHostMemoryUsage();
+        diskService.getHostDiskUsage();
     }
 }
