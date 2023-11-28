@@ -66,7 +66,7 @@ public class CpuService {
                     seoulZoneId, startTime, endTime);
 
             // 결과를 StringBuilder에 추가
-            resultBuilder.append(formatCPUInfo(hostId, hostName, cpuUsage)).append("\n");
+            resultBuilder.append(formatCPUInfo(hostId, hostName, cpuUsage)).append("\n\n");
         }
 
         return resultBuilder.toString();

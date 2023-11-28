@@ -65,7 +65,7 @@ public class MemoryService {
             String itemId = getItemId(zabbixApiUrl, authToken, hostId, "vm.memory.utilization");
             String availableMemory = getItemValueInHourlyIntervals(zabbixApiUrl, authToken, itemId, seoulZoneId, startTime, endTime);
             //resultBuilder.append("The memory size in bytes or in percentage from total(").append(hostId).append("(").append(hostName).append(") : ").append(availableMemory).append("\n");
-            resultBuilder.append(formatMemoryInfo(hostId, hostName, availableMemory)).append("\n");
+            resultBuilder.append(formatMemoryInfo(hostId, hostName, availableMemory)).append("\n\n");
         }
 
         return resultBuilder.toString();

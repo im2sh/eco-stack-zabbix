@@ -60,7 +60,7 @@ public class DiskService {
             String diskReadStatistics = getItemValueInHourlyIntervals(zabbixApiUrl, authToken, diskReadId, seoulZoneId, startTime, endTime);
 
             resultBuilder.append("Disk(").append(hostId).append("(").append(hostName).append(") : ").append("\n");
-            resultBuilder.append("The disk read statistics\n").append(diskReadStatistics).append("\n");
+            resultBuilder.append("The disk read statistics\n").append(diskReadStatistics).append("\n\n");
 
             String diskWriteId = getItemId(zabbixApiUrl, authToken, hostId, "vfs.dev.write.rate[vda]");
             String diskWriteStatistics = getItemValueInHourlyIntervals(zabbixApiUrl, authToken, diskWriteId, seoulZoneId, startTime, endTime);
@@ -86,7 +86,7 @@ public class DiskService {
             String diskReadStatistics = getItemValue(zabbixApiUrl, auth, diskReadId);
 
             resultBuilder.append("Disk(").append(hostId).append("(").append(hostName).append(") : ").append("\n");
-            resultBuilder.append("The disk read statistics:").append(diskReadStatistics).append("\n");
+            resultBuilder.append("The disk read statistics:").append(diskReadStatistics).append("\n\n");
 
             String diskWriteId = getItemId(zabbixApiUrl, auth, hostId, "vfs.dev.write.rate[vda]");
             String diskWriteStatistics = getItemValue(zabbixApiUrl, auth, diskWriteId);
