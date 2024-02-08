@@ -1,6 +1,10 @@
 # [Cloud Infrastructure Resource Dashboard for Achieving Low-Carbon Private Cloud]
 📎[Product Demo Video](https://youtu.be/jsv8R1l6dMs?si=uT90IfXRjgTiIyDp)
 
+# Building a cloud monitoring environment
+Monitoring Tools : https://velog.io/@im2sh/posts?tag=monitoring</br>
+Openstack : https://velog.io/@im2sh/posts?tag=openstack
+
 # Team
 - **Mentor**: Seong Soo Cho, Openstack Korea Group
 - Seok Hwan Lee, Kyungpook National University
